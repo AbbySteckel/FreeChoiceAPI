@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="style.css"/>
 
 </head>
-<body>
+<body onload="hideEverything();">
 <header>Museum Walk</header>
+<h1>Filter works</h1>
 <select id="classification">
     <option value="0">Select Category</option>
     <option value="Sculpture">Sculpture</option>
@@ -30,11 +31,31 @@
     <option value="20th century">20th century</option>
     <option value="21th century">21th century</option>
 </select>
-<button id="getData">get data</button>
-
-<h1>Match the title</h1>
-<button id="generatePhotos" onclick="getPhotos();">get photos</button>
+<br>
+<button id="matchTitle" onclick="displayMatchTitle()">Match the title</button>
+<br>
+<button id="getPhotos">get photos</button>
+<div id="error"></div>
 <div id="title"></div>
-<div id="photos"></div>
+<br>
+<div id="photos">
+
+    <img id="photos0" class='photos'>
+    <img id="photos1" class='photos'>
+    <img id="photos2" class='photos'>
+    <img id="photos3" class='photos'>
+    <img id="photos4" class='photos'>
+
+</div>
+<br>
+<div id="verification"></div>
+<br>
+<button id="guessOrigin" onclick="displayGuessOrigin()">Guess origin of work</button>
+<br>
+<button id="getPhoto">get photo</button>
+<div id="photo"></div>
+<br>
+<input type="text" id="originGuess" value="" size="20">
+<button id="submitGuess">submit guess</button>
 </body>
 </html>

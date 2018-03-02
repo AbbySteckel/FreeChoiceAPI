@@ -4,7 +4,7 @@
 //if commentary is not null, add to array. then select random object from array.
 
 //possible data: culture, title, description, commentary
-
+var objects = [];
 var urlStart= 'https://api.harvardartmuseums.org/Object?size=50&apikey=b58976d0-1287-11e8-b9d0-8dfce0d04c25';
 
 $(document).ready(function() {
@@ -14,6 +14,7 @@ $(document).ready(function() {
 
     $("#classification").on('change', function () {
         classification = $(this).val();
+        console.log(classification);
 
     });
 
@@ -22,13 +23,25 @@ $(document).ready(function() {
 
     });
 
-    $("#getData").on('click', function () {
-        magic(classification, century);
+    $("#getPhotos").on('click', function () {
+        magic1(classification, century);
+
+    });
+
+    $(".photos").on('click', function(){
+        console.log('click');
+        checkAnswer(this.src);
+
+    });
+
+    $("#getPhoto").on('click', function(){
+       magic2(classification,century);
     });
 
 });
 
-function magic(classification, century){
+
+function magic1(classification, century){
     $.ajax({
         url: urlStart+'&classification='+classification+ '&century='+ century,
         type: 'GET',
@@ -36,60 +49,163 @@ function magic(classification, century){
         dataType: 'json',
         success: function(result) {
             console.log(result);
-            dataSet = result;
+            getPhotos(result);
         },
         error: function() { alert('Failed!'); }
 
 
     });
+
 }
 
-function getPhotos(){
+function magic2(classification, century){
+    $.ajax({
+        url: urlStart+'&classification='+classification+ '&century='+ century,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'json',
+        success: function(result) {
+            console.log(result);
+            getPhoto(result);
+        },
+        error: function() { alert('Failed!'); }
+
+
+    });
+
+}
+
+
+function getPhotos(dataSet){
+    $("#verification").empty();
+    $("#error").empty();
     console.log(dataSet);
-    $("#photos").empty();
     var photos=[];
-    var result="";
-    for (var i=0; i<dataSet.records.length; i++){
-
-        console.log(dataSet.records[i].hasOwnProperty("images"));
-        if(dataSet.records[i].hasOwnProperty("images")&&dataSet.records[i].images.length>0) {
-            photos.push(dataSet.records[i].images[0].baseimageurl);
-        }
+    objects=[];
+    if(dataSet.records.length==0){
+        $("#error").append("Sorry, no works meet this description");
     }
-    for (var i=0; i<4; i++){
 
-        if(correct) {
-            result+="<img height='70' class='photos' id='YESphoto" + i + "' src="+photos[i]+"><br>";
-        } else {
-            result+="<img height='70' class='photos' id='photo" + i + "' src="+photos[i]+"><br>";
+
+//here: filter your data and get the exact
+// data set you are going to work with this time through
+
+    var counter = 0;
+    while(photos.length<5) {
+
+        if(dataSet.records[counter].hasOwnProperty("images")&&dataSet.records[counter].images.length>0) {
+
+            //? do you need photos here?
+            photos.push(dataSet.records[counter].images[0].baseimageurl);
+            objects.push(dataSet.records[counter]);
+
         }
 
+        counter++;
+
     }
-    $("#photos").append(result);
-    getRandomTitle();
+
+    // for (var i=0; i<dataSet.records.length; i++){
+    //     if(dataSet.records[i].hasOwnProperty("images")&&dataSet.records[i].images.length>0) {
+    //         photos.push(dataSet.records[i].images[0].baseimageurl);
+    //
+    //         objUsing.push(dataSet.records[i]);
+    //     }
+    // }
+
+    for (var i=0; i<5; i++) {
+
+        $("#photos" + i).attr("src",photos[i]);
+        $("#photos" + i).attr("height",200);
+
+    }
+
+    //pass data
+    getRandomTitle(objects);
 }
 
-function getRandomTitle(){
+
+//add a parameter
+function getRandomTitle(objects){
     $("#title").empty();
     var titles=[];
     var title = "";
-    for (var i=0; i<dataSet.records.length; i++){
-        if(dataSet.records[i].hasOwnProperty("images")&&dataSet.records[i].images.length>0) {
-            if(titles.length<4){
-                titles.push(dataSet.records[i].title);
-            }
-        }
+    for (var i=0; i<objects.length; i++){
+        titles.push(objects[i].title);
     }
 
     title+=titles[Math.floor(Math.random()*titles.length)];
     $("#title").append(title);
 }
 
-function checkAnswer(){
+function checkAnswer(url){
+    $("#verification").empty();
+    console.log(objects);
+    console.log(url);
     var title=$("#title").text();
-    $(".photos").on('click', function(){
-        //var photo=this.val();
-        console.log(this.id);
+    for(var i=0; i<objects.length; i++){
+        if(objects[i].images[0].baseimageurl==url){
+            if(objects[i].title==title){
+                $("#verification").append("correct!");
+            }else{
+                $("#verification").append("sorry, try again");
+            }
+        }
+    }
+}
 
-    });
+function getPhoto(dataSet){
+    var photos=[];
+    objects=[];
+    var photo="";
+
+    var counter = 0;
+    while(photos.length<5) {
+
+        if(dataSet.records[counter].hasOwnProperty("images")&&dataSet.records[counter].images.length>0) {
+
+            photos.push(dataSet.records[counter].images[0].baseimageurl);
+            objects.push(dataSet.records[counter]);
+
+        }
+
+        counter++;
+
+    }
+    photo+=photos[Math.floor(Math.random()*photos.length)];
+    console.log(photo);
+    $("#photo").attr("src",photo);
+    $("#photo").attr("height",200);
+
+
+
+
+}
+
+//next steps: work on CSS, clean up glitches, create error messages
+
+function hideEverything(){
+    var ids = ["#getPhotos","#title","#photos","#verification","#getPhoto","#originGuess","#submitGuess"];
+
+    for(var i=0;i<ids.length;i++){
+        $(ids[i]).css("display", "none");
+    }
+
+}
+
+function displayMatchTitle(){
+    hideEverything();
+    $("#getPhotos").css("display","inline");
+    $("#photos").css("display","inline");
+    $("#verification").css("display","inline");
+    $("#title").css("display","inline");
+
+}
+
+function displayGuessOrigin(){
+    hideEverything();
+    $("#getPhoto").css("display","inline");
+    $("#photo").css("display","inline");
+    $("#originGuess").css("display","inline");
+    $("#submitGuess").css("display","inline");
 }
