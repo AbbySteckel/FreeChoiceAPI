@@ -19,6 +19,6 @@ select{
     font-size: 20px;
 }
 
-#getPhotos{
+#getPhotos, #getPhoto{
     margin-bottom: 5px;
 }

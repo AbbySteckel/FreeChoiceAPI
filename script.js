@@ -95,7 +95,7 @@ function getPhotos(dataSet){
 
         if(dataSet.records[counter].hasOwnProperty("images")&&dataSet.records[counter].images.length>0) {
 
-            //? do you need photos here?
+            //still glitching when images array is empty
             photos.push(dataSet.records[counter].images[0].baseimageurl);
             objects.push(dataSet.records[counter]);
 
@@ -145,13 +145,12 @@ function checkAnswer(url){
     var title=$("#title").text();
     for(var i=0; i<objects.length; i++){
         if(objects[i].images[0].baseimageurl==url){
-            if(objects[i].title==title){
-                $("#verification").append("correct!");
-            }else{
-                $("#verification").append("sorry, try again");
+            if(objects[i].title==title) {
+                return $("#verification").append("correct!");
             }
         }
     }
+    $("#verification").append("sorry, try again");
 }
 
 function getPhoto(dataSet){
@@ -185,7 +184,7 @@ function getPhoto(dataSet){
 //next steps: work on CSS, clean up glitches, create error messages
 
 function hideEverything(){
-    var ids = ["#getPhotos","#title","#photos","#verification","#getPhoto","#originGuess","#submitGuess"];
+    var ids = ["#getPhotos","#title","#photos","#verification","#getPhoto","#originGuess","#submitGuess","#photo"];
 
     for(var i=0;i<ids.length;i++){
         $(ids[i]).css("display", "none");
