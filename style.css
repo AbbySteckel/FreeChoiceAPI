@@ -1,0 +1,24 @@
+
+header{
+    font-size: 30px;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    font-size:20px;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+select{
+    margin-bottom: 5px;
+}
+
+#matchTitle,#guessOrigin{
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+#getPhotos, #getPhoto{
+    margin-bottom: 5px;
+}
