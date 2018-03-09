@@ -38,6 +38,12 @@ $(document).ready(function() {
        magic2(classification,century);
     });
 
+    $("#submitGuess").on('click', function(){
+        var guess = $('input[name=origin]:checked').val();
+        console.log(guess);
+       guessOrigin(guess);
+    });
+
 });
 
 
@@ -175,10 +181,32 @@ function getPhoto(dataSet){
     console.log(photo);
     $("#photo").attr("src",photo);
     $("#photo").attr("height",200);
+    getOrigin();
 
 
+}
 
+function getOrigin(){
+    var origins=[];
+    for (var i=0; i<objects.length; i++){
+        origins.push(objects[i].culture);
+    }
+    for(var i=0; i<origins.length; i++){
+        $("#originOptions").append("<input type='radio' name='origin' value='"+origins[i]+"'>"+origins[i]+"<br>");
+    }
+}
 
+function guessOrigin(guess){
+    var url=$("#photo").src;
+    console.log(url);
+    for(var i=0; i<objects.length; i++){
+        if(objects[i].images[0].baseimageurl==url){
+            if(objects[i].culture==guess) {
+                return $("#verification").append("correct!");
+            }
+        }
+    }
+    $("#verification").append("sorry, try again");
 }
 
 //next steps: work on CSS, clean up glitches, create error messages
