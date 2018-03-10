@@ -6,6 +6,7 @@
 //possible data: culture, title, description, commentary
 var objects = [];
 var urlStart= 'https://api.harvardartmuseums.org/Object?size=50&apikey=b58976d0-1287-11e8-b9d0-8dfce0d04c25';
+var origins=[];
 
 $(document).ready(function() {
     var classification = "";
@@ -160,7 +161,9 @@ function checkAnswer(url){
 }
 
 function getPhoto(dataSet){
+    $("#verif2").empty();
     var photos=[];
+    origins=[];
     objects=[];
     var photo="";
 
@@ -168,9 +171,13 @@ function getPhoto(dataSet){
     while(photos.length<5) {
 
         if(dataSet.records[counter].hasOwnProperty("images")&&dataSet.records[counter].images.length>0) {
+            if(origins.indexOf(dataSet.records[counter].culture)<0){
+                photos.push(dataSet.records[counter].images[0].baseimageurl);
+                objects.push(dataSet.records[counter]);
+                origins.push(dataSet.records[counter].culture);
+            }
 
-            photos.push(dataSet.records[counter].images[0].baseimageurl);
-            objects.push(dataSet.records[counter]);
+
 
         }
 
@@ -182,37 +189,40 @@ function getPhoto(dataSet){
     $("#photo").attr("src",photo);
     $("#photo").attr("height",200);
     getOrigin();
+    console.log(origins);
 
 
 }
 
 function getOrigin(){
-    var origins=[];
-    for (var i=0; i<objects.length; i++){
-        origins.push(objects[i].culture);
-    }
+    $("#originOptions").empty();
+   // for (var i=0; i<objects.length; i++){
+   //     origins.push(objects[i].culture);
+   // }
     for(var i=0; i<origins.length; i++){
         $("#originOptions").append("<input type='radio' name='origin' value='"+origins[i]+"'>"+origins[i]+"<br>");
     }
 }
 
 function guessOrigin(guess){
-    var url=$("#photo").src;
+    $("#verif2").empty();
+    var url=$(".photo").attr('src');
     console.log(url);
     for(var i=0; i<objects.length; i++){
         if(objects[i].images[0].baseimageurl==url){
             if(objects[i].culture==guess) {
-                return $("#verification").append("correct!");
+                return $("#verif2").append("correct!");
             }
         }
     }
-    $("#verification").append("sorry, try again");
+    $("#verif2").append("sorry, try again");
 }
 
 //next steps: work on CSS, clean up glitches, create error messages
 
 function hideEverything(){
-    var ids = ["#getPhotos","#title","#photos","#verification","#getPhoto","#originGuess","#submitGuess","#photo"];
+    var ids = ["#getPhotos","#title","#photos","#verification","#getPhoto","#originGuess","#submitGuess","#photo",
+    "#originOptions","#verif2"];
 
     for(var i=0;i<ids.length;i++){
         $(ids[i]).css("display", "none");
@@ -235,4 +245,6 @@ function displayGuessOrigin(){
     $("#photo").css("display","inline");
     $("#originGuess").css("display","inline");
     $("#submitGuess").css("display","inline");
+    $("#originOptions").css("display","inline");
+    $("#verif2").css("display","inline");
 }
