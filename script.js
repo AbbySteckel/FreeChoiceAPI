@@ -161,6 +161,7 @@ function checkAnswer(url){
 }
 
 function getPhoto(dataSet){
+    //error message if no data meets requirements
     $("#verif2").empty();
     var photos=[];
     origins=[];
@@ -171,7 +172,7 @@ function getPhoto(dataSet){
     while(photos.length<5) {
 
         if(dataSet.records[counter].hasOwnProperty("images")&&dataSet.records[counter].images.length>0) {
-            if(origins.indexOf(dataSet.records[counter].culture)<0){
+            if(dataSet.records[counter].culture!=null&&origins.indexOf(dataSet.records[counter].culture)<0){
                 photos.push(dataSet.records[counter].images[0].baseimageurl);
                 objects.push(dataSet.records[counter]);
                 origins.push(dataSet.records[counter].culture);
