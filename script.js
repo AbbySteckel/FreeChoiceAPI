@@ -29,6 +29,15 @@ $(document).ready(function() {
 
     });
 
+    $(".photos").on('mouseenter', function () {
+        $('.selected').removeClass('selected');
+        $(this).addClass('selected');
+    });
+
+    $(".photos").on('mouseleave', function () {
+        $('.selected').removeClass('selected');
+    });
+
     $(".photos").on('click', function(){
         console.log('click');
         checkAnswer(this.src);

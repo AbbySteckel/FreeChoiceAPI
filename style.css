@@ -24,3 +24,11 @@ select{
 #getPhotos, #getPhoto{
     margin-bottom: 5px;
 }
+
+#photos .selected {
+    box-shadow:0px 12px 22px 1px #b283ff;
+}
+
+.photos, #photo {
+    border:solid 2px #a01bff;
+}
