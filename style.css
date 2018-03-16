@@ -6,10 +6,17 @@ header{
     color: #7e40ff;
 }
 
-h1, h2, h3 {
+body {
+    text-align: center;
+    font-family: "Britannic Bold";
+    background-color: #dbdeee;
+}
+
+h1 {
     font-size:20px;
     font-weight: normal;
     margin-bottom: 5px;
+    color: #7e40ff;
 }
 
 select{
@@ -19,10 +26,13 @@ select{
 #matchTitle,#guessOrigin{
     margin-bottom: 5px;
     font-size: 20px;
+    color: #7e40ff;
+
 }
 
-#getPhotos, #getPhoto{
+#getPhotos, #getPhoto, #submitGuess{
     margin-bottom: 5px;
+    background-color: #7e40ff;
 }
 
 #photos .selected {
@@ -30,5 +40,5 @@ select{
 }
 
 .photos, #photo {
-    border:solid 2px #a01bff;
+    border: solid 2px #7e40ff;
 }

@@ -1,9 +1,20 @@
 
 // https://github.com/harvardartmuseums/api-docs
 
-//if commentary is not null, add to array. then select random object from array.
 
-//possible data: culture, title, description, commentary
+//why does it say no object meets the description but display a title? e.g. 20th century paintings
+
+//show only photos.length number of photos when photos.length<5
+
+//stop printing "undefined"
+
+//turn photo green for correct guess, red for incorrect
+
+//fix game2
+
+//make game2 work for photographs
+
+
 var objects = [];
 var urlStart= 'https://api.harvardartmuseums.org/Object?size=50&apikey=b58976d0-1287-11e8-b9d0-8dfce0d04c25';
 var origins=[];
@@ -11,6 +22,7 @@ var origins=[];
 $(document).ready(function() {
     var classification = "";
     var century = "";
+    //$("photos").hide(); hide borders
 
 
     $("#classification").on('change', function () {
@@ -24,8 +36,28 @@ $(document).ready(function() {
 
     });
 
+    $("#matchTitle").on('click', function(){
+        $("#game1").slideToggle();
+        $("#game2").hide();
+    });
+
+    $("#guessOrigin").on('click', function(){
+       $("#game2").slideToggle();
+       $("#game1").hide();
+    });
+
     $("#getPhotos").on('click', function () {
-        magic1(classification, century);
+        if(classification=="allWorks"&&century=="allPeriods") {
+            magic1("", "");
+        }
+        if(classification=="allWorks") {
+            magic1("", century);
+        }
+        if(century=="allPeriods"){
+            magic1(classification,"");
+        }else{
+            magic1(classification, century);
+        }
 
     });
 
@@ -45,6 +77,7 @@ $(document).ready(function() {
     });
 
     $("#getPhoto").on('click', function(){
+        console.log(classification);
        magic2(classification,century);
     });
 
@@ -68,7 +101,6 @@ function magic1(classification, century){
             getPhotos(result);
         },
         error: function() { alert('Failed!'); }
-
 
     });
 
@@ -94,12 +126,18 @@ function magic2(classification, century){
 
 function getPhotos(dataSet){
     $("#verification").empty();
-    $("#error").empty();
+    $("#error1").empty();
     console.log(dataSet);
     var photos=[];
     objects=[];
-    if(dataSet.records.length==0){
-        $("#error").append("Sorry, no works meet this description");
+    if(dataSet.records.length==0 || dataSet.records[0].hasOwnProperty("images")==false){
+        $("#error1").append("Sorry, no works meet this description");
+        for (var i=0; i<photos.length; i++) {
+
+            $("#photos" + i).attr("src","");
+            $("#photos" + i).attr("height",200);
+
+        }
     }
 
 
@@ -108,40 +146,34 @@ function getPhotos(dataSet){
 
     var counter = 0;
     while(photos.length<5) {
+        if(counter<dataSet.records.length) {
+            if (dataSet.records[counter].hasOwnProperty("images") && dataSet.records[counter].images.length > 0) {
 
-        if(dataSet.records[counter].hasOwnProperty("images")&&dataSet.records[counter].images.length>0) {
+                //still glitching when images array is empty
+                photos.push(dataSet.records[counter].images[0].baseimageurl);
+                objects.push(dataSet.records[counter]);
 
-            //still glitching when images array is empty
-            photos.push(dataSet.records[counter].images[0].baseimageurl);
-            objects.push(dataSet.records[counter]);
+            }
 
+            counter++;
+
+        }else{
+            break;
         }
-
-        counter++;
-
     }
 
-    // for (var i=0; i<dataSet.records.length; i++){
-    //     if(dataSet.records[i].hasOwnProperty("images")&&dataSet.records[i].images.length>0) {
-    //         photos.push(dataSet.records[i].images[0].baseimageurl);
-    //
-    //         objUsing.push(dataSet.records[i]);
-    //     }
-    // }
 
-    for (var i=0; i<5; i++) {
+    for (var i=0; i<photos.length; i++) {
 
         $("#photos" + i).attr("src",photos[i]);
         $("#photos" + i).attr("height",200);
 
     }
 
-    //pass data
     getRandomTitle(objects);
 }
 
 
-//add a parameter
 function getRandomTitle(objects){
     $("#title").empty();
     var titles=[];
@@ -171,36 +203,44 @@ function checkAnswer(url){
 
 function getPhoto(dataSet){
     //error message if no data meets requirements
+
     $("#verif2").empty();
     var photos=[];
     origins=[];
     objects=[];
     var photo="";
+    if(dataSet.records.length==0 || dataSet.records[0].hasOwnProperty("images")==false){
+        $("#error2").append("Sorry, no works meet this description");
+        $("#photo").attr("src","");
+        $("#photo").attr("height",5);
+        //clear radio buttons $("#origin").value.empty();
 
-    var counter = 0;
-    while(photos.length<5) {
+    }else{
+        var counter = 0;
+        while(photos.length<5) {
+            if(counter<dataSet.records.length) {
+                if (dataSet.records[counter].hasOwnProperty("images") && dataSet.records[counter].images.length > 0) {
+                    if (dataSet.records[counter].culture != null && origins.indexOf(dataSet.records[counter].culture) < 0) {
+                        photos.push(dataSet.records[counter].images[0].baseimageurl);
+                        objects.push(dataSet.records[counter]);
+                        origins.push(dataSet.records[counter].culture);
+                    }
+                }
+            }else{
+                break;
 
-        if(dataSet.records[counter].hasOwnProperty("images")&&dataSet.records[counter].images.length>0) {
-            if(dataSet.records[counter].culture!=null&&origins.indexOf(dataSet.records[counter].culture)<0){
-                photos.push(dataSet.records[counter].images[0].baseimageurl);
-                objects.push(dataSet.records[counter]);
-                origins.push(dataSet.records[counter].culture);
+
             }
 
-
-
+            counter++;
         }
-
-        counter++;
-
+        photo+=photos[Math.floor(Math.random()*photos.length)];
+        console.log(photo);
+        $("#photo").attr("src",photo);
+        $("#photo").attr("height",200);
+        getOrigin();
+        console.log(origins);
     }
-    photo+=photos[Math.floor(Math.random()*photos.length)];
-    console.log(photo);
-    $("#photo").attr("src",photo);
-    $("#photo").attr("height",200);
-    getOrigin();
-    console.log(origins);
-
 
 }
 

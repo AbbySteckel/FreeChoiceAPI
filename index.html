@@ -5,10 +5,12 @@
     <title>Art Review Game</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="script.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css"/>
 
+
 </head>
-<body onload="hideEverything();">
+<body>
 <header>Museum Walk</header>
 <h1>Filter works</h1>
 <select id="classification">
@@ -18,6 +20,7 @@
     <option value="Paintings">Paintings</option>
     <option value="Musical Instruments">Musical Instruments</option>
     <option value="Photographs">Photographs</option>
+    <option value="allWorks">All Works</option>
 </select>
 
 <select id="century">
@@ -30,38 +33,46 @@
     <option value="19th century">19th century</option>
     <option value="20th century">20th century</option>
     <option value="21th century">21th century</option>
+    <option value="allPeriods">All Periods</option>
 </select>
 <br>
-<button id="matchTitle" onclick="displayMatchTitle()">Match the title</button>
-<br>
-<button id="getPhotos">get photos</button>
-<div id="error"></div>
-<div id="title"></div>
-<br>
-<div id="photos">
+<button id="matchTitle" class="btn btn-outline-primary">Match the title</button>
+<div id="game1">
+    <br>
+    <button id="getPhotos" class="btn btn-primary btn-sm">get photos</button>
+    <div id="error1"></div>
+    <div id="title"></div>
+    <br>
+    <div id="photos">
 
-    <img id="photos0" class='photos'>
-    <img id="photos1" class='photos'>
-    <img id="photos2" class='photos'>
-    <img id="photos3" class='photos'>
-    <img id="photos4" class='photos'>
+        <img id="photos0" class='photos'>
+        <img id="photos1" class='photos'>
+        <img id="photos2" class='photos'>
+        <img id="photos3" class='photos'>
+        <img id="photos4" class='photos'>
+
+    </div>
+    <br>
+    <div id="verification"></div>
 
 </div>
 <br>
-<div id="verification"></div>
+<button id="guessOrigin" class="btn btn-outline-primary">Guess origin of work</button>
 <br>
-<button id="guessOrigin" onclick="displayGuessOrigin()">Guess origin of work</button>
-<br>
-<button id="getPhoto">get photo</button>
-<br>
-<img id="photo" class='photo'>
-<br>
-<form id="originOptions">
 
-</form>
+<div id="game2">
+    <button id="getPhoto" class="btn btn-primary btn-sm">get photo</button>
+    <br>
+    <div id="error2"></div>
+    <img id="photo" class='photo'>
+    <br>
+    <form id="originOptions">
 
-<button id="submitGuess">submit guess</button>
-<br>
-<div id="verif2"></div>
+    </form>
+
+    <button id="submitGuess" class="btn btn-primary btn-sm">submit guess</button>
+    <br>
+    <div id="verif2"></div>
+</div>
 </body>
 </html>
