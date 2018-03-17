@@ -4,11 +4,7 @@
 
 //why does it say no object meets the description but display a title? e.g. 20th century paintings
 
-//show only photos.length number of photos when photos.length<5
-
 //stop printing "undefined"
-
-//turn photo green for correct guess, red for incorrect
 
 //fix game2
 
@@ -47,6 +43,8 @@ $(document).ready(function() {
     });
 
     $("#getPhotos").on('click', function () {
+        $('.wrong').removeClass('wrong');
+        $('.correct').removeClass('correct');
         if(classification=="allWorks"&&century=="allPeriods") {
             magic1("", "");
         }
@@ -72,13 +70,25 @@ $(document).ready(function() {
 
     $(".photos").on('click', function(){
         console.log('click');
+        $('.wrong').removeClass('wrong');
+        $('.correct').removeClass('correct');
         checkAnswer(this.src);
 
     });
 
     $("#getPhoto").on('click', function(){
-        console.log(classification);
-       magic2(classification,century);
+        if(classification=="allWorks"&&century=="allPeriods") {
+            magic2("", "");
+        }
+        if(classification=="allWorks") {
+            magic2("", century);
+        }
+        if(century=="allPeriods"){
+            magic2(classification,"");
+        }else{
+            magic2(classification, century);
+        }
+
     });
 
     $("#submitGuess").on('click', function(){
@@ -157,16 +167,21 @@ function getPhotos(dataSet){
 
             counter++;
 
-        }else{
+        }else {
             break;
         }
     }
 
 
-    for (var i=0; i<photos.length; i++) {
+    for (var i=0; i<5; i++) {
+        if(i<photos.length){
+            $("#photos" + i).attr("src",photos[i]);
+            $("#photos" + i).attr("height",200);
+        }else{
 
-        $("#photos" + i).attr("src",photos[i]);
-        $("#photos" + i).attr("height",200);
+            $("#photos" + i).attr("src","");
+            $("#photos" + i).attr("height",200);
+        }
 
     }
 
@@ -194,11 +209,13 @@ function checkAnswer(url){
     for(var i=0; i<objects.length; i++){
         if(objects[i].images[0].baseimageurl==url){
             if(objects[i].title==title) {
+                $('.selected').addClass('correct');
                 return $("#verification").append("correct!");
             }
         }
     }
     $("#verification").append("sorry, try again");
+    $('.selected').addClass('wrong');
 }
 
 function getPhoto(dataSet){
@@ -266,35 +283,4 @@ function guessOrigin(guess){
         }
     }
     $("#verif2").append("sorry, try again");
-}
-
-//next steps: work on CSS, clean up glitches, create error messages
-
-function hideEverything(){
-    var ids = ["#getPhotos","#title","#photos","#verification","#getPhoto","#originGuess","#submitGuess","#photo",
-    "#originOptions","#verif2"];
-
-    for(var i=0;i<ids.length;i++){
-        $(ids[i]).css("display", "none");
-    }
-
-}
-
-function displayMatchTitle(){
-    hideEverything();
-    $("#getPhotos").css("display","inline");
-    $("#photos").css("display","inline");
-    $("#verification").css("display","inline");
-    $("#title").css("display","inline");
-
-}
-
-function displayGuessOrigin(){
-    hideEverything();
-    $("#getPhoto").css("display","inline");
-    $("#photo").css("display","inline");
-    $("#originGuess").css("display","inline");
-    $("#submitGuess").css("display","inline");
-    $("#originOptions").css("display","inline");
-    $("#verif2").css("display","inline");
 }

@@ -42,3 +42,12 @@ select{
 .photos, #photo {
     border: solid 2px #7e40ff;
 }
+
+#photos .wrong {
+    box-shadow:0px 12px 22px 1px #ff4546;
+}
+
+#photos .correct {
+    box-shadow:0px 12px 22px 1px #1aff64;
+}
+
