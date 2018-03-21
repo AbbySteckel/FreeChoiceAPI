@@ -4,11 +4,11 @@
 
 //why does it say no object meets the description but display a title? e.g. 20th century paintings
 
-//make game2 work for photographs
-
 //prints "no works meet this description" for 16th century paintings
 
 //hide photo borders when there aren't photos
+
+//delete Game1 photos when no works meet description
 
 
 var objects = [];
@@ -18,8 +18,6 @@ var origins=[];
 $(document).ready(function() {
     var classification = "";
     var century = "";
-    //$("photos").hide(); hide borders
-
 
     $("#classification").on('change', function () {
         classification = $(this).val();
@@ -140,7 +138,7 @@ function getPhotos(dataSet){
     console.log(dataSet);
     var photos=[];
     objects=[];
-
+//fix!!!!!!
     if(dataSet.records.length==0 || dataSet.records[0].hasOwnProperty("images")==false){
         for (var i=0; i<photos.length; i++) {
 
@@ -150,13 +148,12 @@ function getPhotos(dataSet){
         }
         $("#error1").append("Sorry, no works meet this description");
         $("#title").empty();
+        $(".photos").removeClass('border');
     }else{
         var counter = 0;
         while(photos.length<5) {
             if(counter<dataSet.records.length) {
                 if (dataSet.records[counter].hasOwnProperty("images") && dataSet.records[counter].images.length > 0) {
-
-                    //still glitching when images array is empty
                     photos.push(dataSet.records[counter].images[0].baseimageurl);
                     objects.push(dataSet.records[counter]);
 
@@ -229,7 +226,7 @@ function getPhoto(dataSet){
         $("#error2").append("Sorry, no works meet this description");
         $("#photo").attr("src","");
         $("#photo").attr("height",5);
-        //clear radio buttons $("#origin").value.empty();
+        $("#photo").removeClass('border');
 
     }else{
         var counter = 0;
@@ -250,6 +247,14 @@ function getPhoto(dataSet){
 
             counter++;
         }
+        var extraOrigins=["Indian","German","Iberian","Byzantine","Chinese","French","Mexican","Korean","Chilean","Polish"];
+        while(origins.length<5){
+            var extraOrig=extraOrigins[Math.floor(Math.random()*extraOrigins.length)];
+            if(origins.indexOf(extraOrig)<0){
+                origins.push(extraOrig);
+            }
+        }
+
         photo+=photos[Math.floor(Math.random()*photos.length)];
         console.log(photo);
         $("#photo").attr("src",photo);
@@ -262,9 +267,6 @@ function getPhoto(dataSet){
 
 function getOrigin(){
     $("#originOptions").empty();
-   // for (var i=0; i<objects.length; i++){
-   //     origins.push(objects[i].culture);
-   // }
     for(var i=0; i<origins.length; i++){
         $("#originOptions").append("<input type='radio' name='origin' value='"+origins[i]+"'>"+origins[i]+"<br>");
     }
