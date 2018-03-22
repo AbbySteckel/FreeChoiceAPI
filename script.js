@@ -1,14 +1,7 @@
 
 // https://github.com/harvardartmuseums/api-docs
 
-
-//why does it say no object meets the description but display a title? e.g. 20th century paintings
-
-//prints "no works meet this description" for 16th century paintings
-
 //hide photo borders when there aren't photos
-
-//delete Game1 photos when no works meet description
 
 
 var objects = [];
@@ -46,10 +39,10 @@ $(document).ready(function() {
         if(classification=="allWorks"&&century=="allPeriods") {
             magic1("", "");
         }
-        if(classification=="allWorks") {
+        else if(classification=="allWorks") {
             magic1("", century);
         }
-        if(century=="allPeriods"){
+        else if(century=="allPeriods"){
             magic1(classification,"");
         }else{
             magic1(classification, century);
@@ -78,10 +71,10 @@ $(document).ready(function() {
         if(classification=="allWorks"&&century=="allPeriods") {
             magic2("", "");
         }
-        if(classification=="allWorks") {
+        else if(classification=="allWorks") {
             magic2("", century);
         }
-        if(century=="allPeriods"){
+        else if(century=="allPeriods"){
             magic2(classification,"");
         }else{
             magic2(classification, century);
@@ -138,14 +131,15 @@ function getPhotos(dataSet){
     console.log(dataSet);
     var photos=[];
     objects=[];
-//fix!!!!!!
+
     if(dataSet.records.length==0 || dataSet.records[0].hasOwnProperty("images")==false){
-        for (var i=0; i<photos.length; i++) {
+        for (var i=0; i<5; i++) {
 
             $("#photos" + i).attr("src","");
             $("#photos" + i).attr("height",200);
 
         }
+
         $("#error1").append("Sorry, no works meet this description");
         $("#title").empty();
         $(".photos").removeClass('border');

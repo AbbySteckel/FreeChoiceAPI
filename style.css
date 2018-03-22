@@ -30,6 +30,10 @@ select{
 
 }
 
+#originOptions {
+    margin-bottom: 5px;
+}
+
 #getPhotos, #getPhoto, #submitGuess{
     margin-bottom: 5px;
     background-color: #7e40ff;
